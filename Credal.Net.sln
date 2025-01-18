@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credal.Net", "src\Credal.Net\Credal.Net.csproj", "{61474AF8-54F3-46E7-9C2F-8B875C15687C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credal.Net.Tests", "tests\Credal.Net.Tests\Credal.Net.Tests.csproj", "{F421EAD8-1199-4A94-A028-0469E2385DBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EB9426BB-1748-4ABE-AA2E-2D934B7FD2AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{22796F0D-2C43-4F66-96CD-151C489FD711}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{EAF2BBAC-A27A-4B1F-B5FB-198FD2253088}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CredalDemo", "examples\CredalDemo\CredalDemo.csproj", "{087B2267-C54C-424A-AD61-D30F632BB59D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61474AF8-54F3-46E7-9C2F-8B875C15687C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61474AF8-54F3-46E7-9C2F-8B875C15687C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61474AF8-54F3-46E7-9C2F-8B875C15687C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61474AF8-54F3-46E7-9C2F-8B875C15687C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F421EAD8-1199-4A94-A028-0469E2385DBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F421EAD8-1199-4A94-A028-0469E2385DBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F421EAD8-1199-4A94-A028-0469E2385DBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F421EAD8-1199-4A94-A028-0469E2385DBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{087B2267-C54C-424A-AD61-D30F632BB59D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{087B2267-C54C-424A-AD61-D30F632BB59D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{087B2267-C54C-424A-AD61-D30F632BB59D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{087B2267-C54C-424A-AD61-D30F632BB59D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{61474AF8-54F3-46E7-9C2F-8B875C15687C} = {22796F0D-2C43-4F66-96CD-151C489FD711}
+		{F421EAD8-1199-4A94-A028-0469E2385DBA} = {EB9426BB-1748-4ABE-AA2E-2D934B7FD2AA}
+		{087B2267-C54C-424A-AD61-D30F632BB59D} = {EAF2BBAC-A27A-4B1F-B5FB-198FD2253088}
+	EndGlobalSection
+EndGlobal
