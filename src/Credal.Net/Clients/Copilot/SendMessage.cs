@@ -22,7 +22,6 @@ public class SendMessage : ClientBase
 
     public async Task<CredalResult<SendChatResult>> SendAsync(string message)
     {
-        this.Endpoint.Command = SendMessage.COMMAND;
         if (this.IsDefaultValid)
         {
             return await this.SendAsync(new SendMessageModel(this.AgentId, message, this.UserEmail!));
@@ -32,6 +31,7 @@ public class SendMessage : ClientBase
 
     public async Task<CredalResult<SendChatResult>> SendAsync(SendMessageModel message)
     {
+        this.Endpoint.Command = SendMessage.COMMAND;
         return await this.Send<SendChatResult, SendMessageModel>(message);
     }
 }

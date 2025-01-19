@@ -4,16 +4,12 @@ using Credal.Net.Core.Config;
 using Credal.Net.Models;
 using Credal.Net.Results;
 using Credal.Net.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Credal.Net.Copilot;
 
 public class ProvideMessageFeedback : ClientBase
 {
+    public static string COMMAND = "provideMessageFeedback";
     public Guid AgentId { get; set; }
     public string? UserEmail { get; set; }
     public bool IsDefaultValid { get => this.AgentId != Guid.Empty && !string.IsNullOrEmpty(this.UserEmail); }
@@ -35,6 +31,7 @@ public class ProvideMessageFeedback : ClientBase
 
     public async Task<CredalResult<ProvideMessageFeedbackResult>> SendAsync(ProvideMessageFeedbackModel feedback)
     {
+        this.Endpoint.Command = ProvideMessageFeedback.COMMAND;
         return await this.Send<ProvideMessageFeedbackResult, ProvideMessageFeedbackModel>(feedback);
     }
 
