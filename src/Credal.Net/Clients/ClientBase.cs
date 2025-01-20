@@ -36,7 +36,7 @@ public class ClientBase
         this._client = client;
     }
 
-    public async Task<CredalResult<TResponse>> Send<TResponse, TRequest>(TRequest message) where TResponse : class
+    public async Task<CredalResult<TResponse>> Send<TResponse, TRequest>(TRequest message, bool nonWrappedResult = false) where TResponse : class
     {
         _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(this.Auth.SecurityType, this.Auth.ApiKey);
         if (this.Headers.HasHeaders)
@@ -64,8 +64,17 @@ public class ClientBase
                     var response = await _client.PostAsync(this.Endpoint.Uri, content);
                     if (response.IsSuccessStatusCode)
                     {
-                        var result = await response.Content.ReadFromJsonAsync<CredalResult<TResponse>>();
-                        return result ?? CredalResult<TResponse>.Failure;
+                        var jsonResults = await response.Content.ReadAsStringAsync();
+                        if(nonWrappedResult)
+                        {
+                            TResponse? simpleResult = JsonSerializer.Deserialize<TResponse>(jsonResults);
+                            return new CredalResult<TResponse>() { Results = simpleResult };
+                        }
+                        else
+                        {
+                            var result = JsonSerializer.Deserialize<CredalResult<TResponse>>(jsonResults);
+                            return result ?? CredalResult<TResponse>.Failure;
+                        }
                     }
                 }
                 break;

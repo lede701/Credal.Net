@@ -1,20 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Credal.Net.Copilot;
-using Credal.Net.Security;
 
-var chat = new SendMessage(new Credal.Net.Config.EndpointConfig(), new Autherization()
-{
-    ApiKey = "<API_KEY>"
-})
-{
-    AgentId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
-    UserEmail = "<userEmailAddress>"
-};
+var chat = new ChatManager(Guid.Parse("00000000-0000-0000-0000-000000000000")
+    , "<user email address>"
+    , "<API Key>");
 
-var response = await chat.SendAsync("The question to ask your Copilot?");
+var response = await chat.SendMessageAsync("<Query to ask CoPilot>");
 
-if (response.IsSuccess)
-{
-    var result = response.Results;
-    Console.WriteLine(result?.Response.Message ?? "No response was available");
-}
+Console.WriteLine(response.Results!.Response.Message);
+Console.WriteLine(response.Results!.ConversationId);

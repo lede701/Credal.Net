@@ -13,18 +13,4 @@ public class Autherization
 
     public bool IsKeyValid { get => !string.IsNullOrEmpty(this.ApiKey); }
     public bool IsSecurityTypeValid { get => !string.IsNullOrEmpty(this.SecurityType); }
-
-    public override string ToString()
-    {
-        if (!this.IsKeyValid)
-        {
-            throw new ArgumentException("ApiKey is required");
-        }
-        if(!this.IsSecurityTypeValid)
-        {
-            throw new ArgumentException("SecurityType is required");
-        }
-
-        return $"{SecurityType} {ApiKey}";
-    }
 }
