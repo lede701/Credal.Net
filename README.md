@@ -10,6 +10,8 @@ are async methods so you will need an unwrapper to get the results in non async 
 Install Credal.Net from Nuget
 
 Create an instance of the CredalClient class.
+1. Pass the Unique Id of your copilot through the constructor
+1. Pass a valid user email address.
 1. Pass your API key through the contructor with a valid email address associated with the API key.
 
 
