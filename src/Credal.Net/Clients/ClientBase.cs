@@ -1,16 +1,14 @@
-﻿using Credal.Net.Config;
+﻿// Developed by: Leland Ede
+// Created: 2025-01-18
+// Updated: 2025-01-20
+// Source: https://github.com/lede701/Credal.Net
+
+using Credal.Net.Config;
 using Credal.Net.Core.Config;
-using Credal.Net.Models;
 using Credal.Net.Results;
 using Credal.Net.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Credal.Net.Clients;
 
@@ -36,7 +34,7 @@ public class ClientBase
         this._client = client;
     }
 
-    public async Task<CredalResult<TResponse>> Send<TResponse, TRequest>(TRequest message, bool nonWrappedResult = false) where TResponse : class
+    public async Task<CredalResult<TResponse>> Send<TResponse, TRequest>(TRequest message, bool resultsNotWrapped = false) where TResponse : class
     {
         _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(this.Auth.SecurityType, this.Auth.ApiKey);
         if (this.Headers.HasHeaders)
@@ -52,9 +50,26 @@ public class ClientBase
         {
             case "DELETE":
                 {
-
+                    var request = new HttpRequestMessage(HttpMethod.Delete, this.Endpoint.Uri)
+                    {
+                        Content = content
+                    };
+                    var response = await _client.SendAsync(request);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonResults = await response.Content.ReadAsStringAsync();
+                        if(resultsNotWrapped)
+                        {
+                            return new CredalResult<TResponse>() { Result = JsonSerializer.Deserialize<TResponse>(jsonResults) };
+                        }
+                        else
+                        {
+                            var result = JsonSerializer.Deserialize<CredalResult<TResponse>>(jsonResults);
+                            return result ?? CredalResult<TResponse>.Failure;
+                        }
+                    }
+                    return CredalResult<TResponse>.Failure;
                 }
-                break;
             case "GET":
                 {
                 }
@@ -65,10 +80,10 @@ public class ClientBase
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonResults = await response.Content.ReadAsStringAsync();
-                        if(nonWrappedResult)
+                        if(resultsNotWrapped)
                         {
                             TResponse? simpleResult = JsonSerializer.Deserialize<TResponse>(jsonResults);
-                            return new CredalResult<TResponse>() { Results = simpleResult };
+                            return new CredalResult<TResponse>() { Result = simpleResult };
                         }
                         else
                         {

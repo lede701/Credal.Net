@@ -1,25 +1,26 @@
-﻿using Credal.Net.Config;
+﻿// Developed by: Leland Ede
+// Created: 2025-01-18
+// Updated: 2025-01-20
+// Source: https://github.com/lede701/Credal.Net
+
+using Credal.Net.Config;
+using Credal.Net.Copilot;
 using Credal.Net.Core.Config;
 using Credal.Net.Models;
 using Credal.Net.Results;
 using Credal.Net.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Credal.Net.Copilot;
+namespace Credal.Net.Clients;
 
-public class ChatManager
+public class CredalClient
 {
     private readonly Guid _agentId;
     private readonly string _userEmail;
-    private Guid _conversationId { get; set; }
+    private Guid? _conversationId { get; set; }
     private readonly EndpointConfig _config;
     private readonly Autherization _auth;
 
-    public ChatManager(Guid agentId, string userEmail, string apiKey)
+    public CredalClient(Guid agentId, string userEmail, string apiKey)
     {
         _agentId = agentId;
         _userEmail = userEmail;
@@ -32,22 +33,24 @@ public class ChatManager
 
     public async Task<CredalResult<SendChatResult>> SendMessageAsync(string message)
     {
-        var client = new SendMessage(this._config, new ClientHeaders(), _auth);
+        var client = new SendMessage(_config, new ClientHeaders(), _auth);
 
-        var msgModel = new SendMessageModel(this._agentId, message, this._userEmail);
-        if (this._conversationId != Guid.Empty)
+        var msgModel = new SendMessageModel(_agentId, message, _userEmail);
+        if (_conversationId is not null && _conversationId != Guid.Empty)
         {
-            msgModel.ConversationId = this._conversationId.ToString();
+            msgModel.ConversationId = _conversationId.ToString();
         }
 
         var response = await client.SendAsync(msgModel);
         if (response.IsSuccess
-            && response.Results is not null)
+            && response.Result is not null)
         {
-            if (this._conversationId == Guid.Empty 
-                || this._conversationId != response.Results.ConversationId)
+            if (_conversationId is null
+                || _conversationId == Guid.Empty
+                || _conversationId != response.Result.ConversationId)
             {
-                this._conversationId = response.Results.ConversationId;
+                // Set new conversation idfor manager to use with tracking
+                _conversationId = response.Result.ConversationId;
             }
 
             return response;
@@ -60,11 +63,11 @@ public class ChatManager
     {
         var client = new CreateConversation(_config, _auth);
 
-        var response = await client.SendAsync(new BaseModel(this._agentId, this._userEmail));
+        var response = await client.SendAsync(new BaseModel(_agentId, _userEmail));
         if (response.IsSuccess
-            && response.Results is not null)
+            && response.Result is not null)
         {
-            this._conversationId = response.Results.ConversationId;
+            _conversationId = response.Result.ConversationId;
             return true;
         }
 
@@ -73,10 +76,14 @@ public class ChatManager
 
     public async Task ProvideFeedback(bool success, string? message)
     {
+        if (_conversationId is null)
+        {
+            throw new ApplicationException("Conversation not created yet.");
+        }
         var client = new ProvideMessageFeedback(_config, _auth);
-        var feedback = new ProvideMessageFeedbackModel(this._agentId
-            , this._userEmail
-            , this._conversationId
+        var feedback = new ProvideMessageFeedbackModel(_agentId
+            , _userEmail
+            , _conversationId.Value
             , success ? MessageFeedbackModel.Positive : MessageFeedbackModel.Negative);
 
         var response = await client.SendAsync(feedback);
@@ -87,13 +94,13 @@ public class ChatManager
         var client = new CreateCopilot(_config, _auth);
         var results = await client.SendAsync(new CreateCopilotModel(name, description, new List<CollaberatorModel>()
         {
-            new CollaberatorModel(this._userEmail, "editor")
+            new CollaberatorModel(_userEmail, "editor")
         }));
 
         if (results.IsSuccess
-            && results.Results is not null)
+            && results.Result is not null)
         {
-            return results.Results.AgentId;
+            return results.Result.AgentId;
         }
 
         return Guid.Empty;
@@ -103,6 +110,6 @@ public class ChatManager
     {
         var client = new DeleteCopilot(_config, _auth);
         var results = await client.SendAsync(new DeleteCopilotModel(copilotId));
-        return copilotId == results!.Results!.CopilotId;
+        return copilotId == results!.Result!.CopilotId;
     }
 }

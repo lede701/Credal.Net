@@ -1,19 +1,21 @@
-﻿using Credal.Net.Clients;
+﻿// Developed by: Leland Ede
+// Created: 2025-01-18
+// Updated: 2025-01-20
+// Source: https://github.com/lede701/Credal.Net
+
+using Credal.Net.Clients;
 using Credal.Net.Config;
 using Credal.Net.Core.Config;
 using Credal.Net.Models;
 using Credal.Net.Results;
 using Credal.Net.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Credal.Net.Copilot;
 
+[Obsolete("This class is in beta and may change in future releases.")]
 public class DeleteCopilot : ClientBase
 {
+    public const string DEVICE = "copilots";
     public const string COMMAND = "deleteCopilot";
     public Guid AgentId { get; set; }
     public string? UserEmail { get; set; }
@@ -36,7 +38,9 @@ public class DeleteCopilot : ClientBase
 
     public async Task<CredalResult<DeleteCopilotResult>> SendAsync(DeleteCopilotModel copilot)
     {
+        this.Endpoint.Device = SendMessage.DEVICE;
         this.Endpoint.Command = SendMessage.COMMAND;
+        this.Endpoint.HttpMethod = "delete";
         return await this.Send<DeleteCopilotResult, DeleteCopilotModel>(copilot, true);
     }
 }

@@ -1,4 +1,9 @@
-﻿using Credal.Net.Clients;
+﻿// Developed by: Leland Ede
+// Created: 2025-01-18
+// Updated: 2025-01-20
+// Source: https://github.com/lede701/Credal.Net
+
+using Credal.Net.Clients;
 using Credal.Net.Config;
 using Credal.Net.Core.Config;
 using Credal.Net.Models;
@@ -9,6 +14,7 @@ namespace Credal.Net.Copilot;
 
 public class CreateConversation : ClientBase
 {
+    public const string DEVICE = "copilots";
     public const string COMMAND = "createConversation";
     public Guid AgentId { get; set; }
     public string? UserEmail { get; set; }
@@ -30,6 +36,7 @@ public class CreateConversation : ClientBase
 
     public async Task<CredalResult<ConversationResult>> SendAsync(BaseModel createModel)
     {
+        this.Endpoint.Device = CreateConversation.DEVICE;
         this.Endpoint.Command = CreateConversation.COMMAND;
         return await this.Send<ConversationResult, BaseModel>(createModel);
     }
