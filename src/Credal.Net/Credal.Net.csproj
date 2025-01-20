@@ -2,9 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+	<Version>0.0.4</Version>
+	<Authors>Leland Ede</Authors>
+	<Company>Community</Company>
+	<PackageId></PackageId>
+	<Title>Credal .Net API SDK</Title>
+	<Description>A library to connect .Net 8.0 project to the Credal API services.</Description>
+	<PackageTags>.Net 8;Credal;AI</PackageTags>
+	<RepositoryUrl>https://github.com/lede701/Credal.Net</RepositoryUrl>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<WarningsAsErrors>Nullable</WarningsAsErrors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\Results\Copilot\" />
+  </ItemGroup>
 
 </Project>

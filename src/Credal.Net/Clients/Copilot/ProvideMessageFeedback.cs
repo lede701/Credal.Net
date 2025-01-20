@@ -1,19 +1,21 @@
-﻿using Credal.Net.Clients;
+﻿// Developed by: Leland Ede
+// Created: 2025-01-18
+// Updated: 2025-01-20
+// Source: https://github.com/lede701/Credal.Net
+
+using Credal.Net.Clients;
 using Credal.Net.Config;
 using Credal.Net.Core.Config;
 using Credal.Net.Models;
 using Credal.Net.Results;
 using Credal.Net.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Credal.Net.Copilot;
 
 public class ProvideMessageFeedback : ClientBase
 {
+    public const string DEVICE = "copilots";
+    public static string COMMAND = "provideMessageFeedback";
     public Guid AgentId { get; set; }
     public string? UserEmail { get; set; }
     public bool IsDefaultValid { get => this.AgentId != Guid.Empty && !string.IsNullOrEmpty(this.UserEmail); }
@@ -35,6 +37,8 @@ public class ProvideMessageFeedback : ClientBase
 
     public async Task<CredalResult<ProvideMessageFeedbackResult>> SendAsync(ProvideMessageFeedbackModel feedback)
     {
+        this.Endpoint.Device = ProvideMessageFeedback.DEVICE;
+        this.Endpoint.Command = ProvideMessageFeedback.COMMAND;
         return await this.Send<ProvideMessageFeedbackResult, ProvideMessageFeedbackModel>(feedback);
     }
 

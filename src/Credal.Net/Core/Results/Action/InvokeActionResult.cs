@@ -3,9 +3,8 @@
 // Updated: 2025-01-20
 // Source: https://github.com/lede701/Credal.Net
 
-namespace Credal.Net.Results;
+namespace Credal.Net.Results.Action;
 
-public class ProvideMessageFeedbackResult
+public class InvokeActionResult
 {
-    public string Result { get; set; } = string.Empty;
 }

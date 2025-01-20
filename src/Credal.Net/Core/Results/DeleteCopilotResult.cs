@@ -7,8 +7,8 @@ using System.Text.Json.Serialization;
 
 namespace Credal.Net.Results;
 
-public class InsertAuditLogResult
+public class DeleteCopilotResult
 {
-    [JsonPropertyName("id")]
-    public Guid Id { get; set; }
+    [JsonPropertyName("copilotId")]
+    public Guid CopilotId { get; set; }
 }
