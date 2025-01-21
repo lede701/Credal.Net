@@ -1,11 +1,12 @@
 ﻿// Developed by: Leland Ede
 // Created: 2025-01-18
-// Updated: 2025-01-20
+// Updated: 2025-01-21
 // Source: https://github.com/lede701/Credal.Net
 
 using Credal.Net.Config;
 using Credal.Net.Copilot;
 using Credal.Net.Core.Config;
+using Credal.Net.Exceptions;
 using Credal.Net.Models;
 using Credal.Net.Results;
 using Credal.Net.Security;
@@ -20,6 +21,12 @@ public class CredalClient
     private readonly EndpointConfig _config;
     private readonly Autherization _auth;
 
+    /// <summary>
+    /// Credal API client for connecting to their AI engine.
+    /// </summary>
+    /// <param name="agentId">Unique ID of Copilot</param>
+    /// <param name="userEmail">Valid user email address</param>
+    /// <param name="apiKey">Credal API generated key</param>
     public CredalClient(Guid agentId, string userEmail, string apiKey)
     {
         _agentId = agentId;
@@ -31,11 +38,16 @@ public class CredalClient
         };
     }
 
-    public async Task<CredalResult<SendChatResult>> SendMessageAsync(string message)
+    /// <summary>
+    /// Copilot API call to query the trained copilot for a response. ConversationId will get update or created when the results are returned and successful.
+    /// </summary>
+    /// <param name="query">Query to ask the copilot</param>
+    /// <returns>CredalRespon wrapped result that contains the SendChatResult object.  Check the IsSuccessful parameter in the result for validation before using the result value.</returns>
+    public async Task<CredalResult<SendChatResult>> SendMessageAsync(string query)
     {
         var client = new SendMessage(_config, new ClientHeaders(), _auth);
 
-        var msgModel = new SendMessageModel(_agentId, message, _userEmail);
+        var msgModel = new SendMessageModel(_agentId, query, _userEmail);
         if (_conversationId is not null && _conversationId != Guid.Empty)
         {
             msgModel.ConversationId = _conversationId.ToString();
@@ -59,7 +71,11 @@ public class CredalClient
         return CredalResult<SendChatResult>.Failure;
     }
 
-    public async Task<bool> CreateConversation()
+    /// <summary>
+    /// Create a new conversation with the copilot. This is optional as the SendMessageAsync method will create a new conversationId when the results are returned.
+    /// </summary>
+    /// <returns>Return true on success and false on failure of creating a conversatioinId</returns>
+    public async Task<bool> CreateConversationAsync()
     {
         var client = new CreateConversation(_config, _auth);
 
@@ -74,11 +90,18 @@ public class CredalClient
         return false;
     }
 
-    public async Task ProvideFeedback(bool success, string? message)
+    /// <summary>
+    /// Provide feedback on messages sent from copilot. This is optional and can be used to help train the copilot.
+    /// </summary>
+    /// <param name="success">Is this a positive repsone from copilot.</param>
+    /// <param name="message">Optional feedback response about the answer provided.</param>
+    /// <returns></returns>
+    /// <exception cref="ConversationException">Thrown when no conversationId is available to provide feedback on.</exception>
+    public async Task ProvideFeedbackAsync(bool success, string? message)
     {
         if (_conversationId is null)
         {
-            throw new ApplicationException("Conversation not created yet.");
+            throw new ConversationException("Conversation not created yet.");
         }
         var client = new ProvideMessageFeedback(_config, _auth);
         var feedback = new ProvideMessageFeedbackModel(_agentId
@@ -89,7 +112,14 @@ public class CredalClient
         var response = await client.SendAsync(feedback);
     }
 
-    public async Task<Guid> CreateCopilot(string name, string description)
+    /// <summary>
+    /// Create a new copilot for the provided user address. This is a beta feature and may change in future releases.
+    /// </summary>
+    /// <param name="name">Copilot name</param>
+    /// <param name="description">Description of the copilot</param>
+    /// <returns>The AgentId or UniqueId in Credal of the new copilot.</returns>
+    [Obsolete("This class is in beta and may change in future releases.")]
+    public async Task<Guid> CreateCopilotAsync(string name, string description)
     {
         var client = new CreateCopilot(_config, _auth);
         var results = await client.SendAsync(new CreateCopilotModel(name, description, new List<CollaberatorModel>()
@@ -106,7 +136,13 @@ public class CredalClient
         return Guid.Empty;
     }
 
-    public async Task<bool> DeleteCopilot(Guid copilotId)
+    /// <summary>
+    /// Delete a copilot from the user email address provided. This is a beta feature and may change in future releases.
+    /// </summary>
+    /// <param name="copilotId">AgentId or UniqueId of copilot in the Credal system.</param>
+    /// <returns>True on successful deletion</returns>
+    [Obsolete("This class is in beta and may change in future releases.")]
+    public async Task<bool> DeleteCopilotAsync(Guid copilotId)
     {
         var client = new DeleteCopilot(_config, _auth);
         var results = await client.SendAsync(new DeleteCopilotModel(copilotId));

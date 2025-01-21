@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-	<Version>0.0.4</Version>
+	<TargetFrameworks>net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
+	<Version>0.0.5</Version>
 	<Authors>Leland Ede</Authors>
 	<Company>Community</Company>
 	<PackageId></PackageId>
 	<Title>Credal .Net API SDK</Title>
-	<Description>A library to connect .Net 8.0 project to the Credal API services.</Description>
-	<PackageTags>.Net 8;Credal;AI</PackageTags>
+	<Description>A library to connect .Net 6.0+ project to the Credal API services.</Description>
+	<PackageTags>.Net 6.0;.Net 7.0;.Net 8.0;.Net 9.0;Credal;AI</PackageTags>
 	<RepositoryUrl>https://github.com/lede701/Credal.Net</RepositoryUrl>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
