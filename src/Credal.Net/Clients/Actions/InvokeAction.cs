@@ -35,7 +35,7 @@ public class InvokeAction : ClientBase
         {
             return await this.SendAsync(new InvokeActionModel(this.AgentId
                 , this.UserEmail!
-                , new HumanConfirmationChannelModel("n/a", "n/a",TimeProvider.System.GetLocalNow().DateTime.ToString("F"))
+                , new HumanConfirmationChannelModel("n/a", "n/a",this.Now.ToString("F"))
                 , new ActionInputModel(message)
                 , "justification"
                 , Guid.NewGuid()
