@@ -1,9 +1,10 @@
-﻿namespace Credal.Net.Extensions;
-
-public static class UriExtension
+﻿namespace Credal.Net.Extensions
 {
-    public static Uri Combine(this Uri uri, params string[] paths)
+    public static class UriExtension
     {
-        return new Uri(paths.Aggregate(uri.AbsoluteUri, (current, path) => $"{current.TrimEnd('/')}/{path.TrimStart('/')}"));
+        public static Uri Combine(this Uri uri, params string[] paths)
+        {
+            return new Uri(paths.Aggregate(uri.AbsoluteUri, (current, path) => $"{current.TrimEnd('/')}/{path.TrimStart('/')}"));
+        }
     }
 }

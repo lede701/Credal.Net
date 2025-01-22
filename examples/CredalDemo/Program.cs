@@ -21,7 +21,7 @@ string quitCommand = "EXIT";
 while (query.ToUpper() != quitCommand)
 {
     Console.WriteLine("---------------------------------------------");
-    Console.WriteLine("Ask your question to type 'exit' to quit.");
+    Console.WriteLine("Ask your question or type 'exit' to quit.");
     Console.Write("Ask: ");
     query = Console.ReadLine() ?? string.Empty;
 

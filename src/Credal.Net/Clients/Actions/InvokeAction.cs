@@ -6,48 +6,49 @@
 
 using Credal.Net.Clients;
 using Credal.Net.Config;
-using Credal.Net.Core.Config;
 using Credal.Net.Models.Action;
 using Credal.Net.Results;
 using Credal.Net.Results.Action;
 using Credal.Net.Security;
 
-namespace Credal.Net.Actions;
-
-[Obsolete("This class is in beta and may change in future releases.")]
-public class InvokeAction : ClientBase
+namespace Credal.Net.Actions
 {
-    public const string DEVICE = "actions";
-    public const string COMMAND = "sendMessage";
-    public Guid AgentId { get; set; }
-    public string? UserEmail { get; set; }
 
-    public bool IsDefaultValid { get => this.AgentId != Guid.Empty && !string.IsNullOrEmpty(this.UserEmail); }
-
-    public InvokeAction(EndpointConfig endpoint, Autherization autherization) : base(autherization, new ClientHeaders(), endpoint) { }
-
-    public InvokeAction(EndpointConfig endpoint, ClientHeaders headers, Autherization autherization) : base(autherization, headers, endpoint) { }
-    public InvokeAction(EndpointConfig endpoint, ClientHeaders headers, Autherization autherization, HttpClient client) : base(autherization, headers, endpoint, client) { }
-
-    public async Task<CredalResult<InvokeActionResult>> SendAsync(string message)
+    [Obsolete("This class is in beta and may change in future releases.")]
+    public class InvokeAction : ClientBase
     {
-        if (this.IsDefaultValid)
+        public const string DEVICE = "actions";
+        public const string COMMAND = "sendMessage";
+        public Guid AgentId { get; set; }
+        public string? UserEmail { get; set; }
+
+        public bool IsDefaultValid { get => this.AgentId != Guid.Empty && !string.IsNullOrEmpty(this.UserEmail); }
+
+        public InvokeAction(EndpointConfig endpoint, Autherization autherization) : base(autherization, new ClientHeaders(), endpoint) { }
+
+        public InvokeAction(EndpointConfig endpoint, ClientHeaders headers, Autherization autherization) : base(autherization, headers, endpoint) { }
+        public InvokeAction(EndpointConfig endpoint, ClientHeaders headers, Autherization autherization, HttpClient client) : base(autherization, headers, endpoint, client) { }
+
+        public async Task<CredalResult<InvokeActionResult>> SendAsync(string message)
         {
-            return await this.SendAsync(new InvokeActionModel(this.AgentId
-                , this.UserEmail!
-                , new HumanConfirmationChannelModel("n/a", "n/a",this.Now.ToString("F"))
-                , new ActionInputModel(message)
-                , "justification"
-                , Guid.NewGuid()
-            ));
+            if (this.IsDefaultValid)
+            {
+                return await this.SendAsync(new InvokeActionModel(this.AgentId
+                    , this.UserEmail!
+                    , new HumanConfirmationChannelModel("n/a", "n/a", this.Now.ToString("F"))
+                    , new ActionInputModel(message)
+                    , "justification"
+                    , Guid.NewGuid()
+                ));
+            }
+            return CredalResult<InvokeActionResult>.Failure;
         }
-        return CredalResult<InvokeActionResult>.Failure;
-    }
 
-    public async Task<CredalResult<InvokeActionResult>> SendAsync(InvokeActionModel message)
-    {
-        this.Endpoint.Device = InvokeAction.DEVICE;
-        this.Endpoint.Command = InvokeAction.COMMAND;
-        return await this.Send<InvokeActionResult, InvokeActionModel>(message);
+        public async Task<CredalResult<InvokeActionResult>> SendAsync(InvokeActionModel message)
+        {
+            this.Endpoint.Device = InvokeAction.DEVICE;
+            this.Endpoint.Command = InvokeAction.COMMAND;
+            return await this.Send<InvokeActionResult, InvokeActionModel>(message);
+        }
     }
 }

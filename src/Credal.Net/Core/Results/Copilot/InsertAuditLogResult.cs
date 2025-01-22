@@ -5,10 +5,11 @@
 
 using System.Text.Json.Serialization;
 
-namespace Credal.Net.Results;
-
-public class DeleteCopilotResult
+namespace Credal.Net.Results.Copilot
 {
-    [JsonPropertyName("copilotId")]
-    public Guid CopilotId { get; set; }
+    public class InsertAuditLogResult
+    {
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
+    }
 }

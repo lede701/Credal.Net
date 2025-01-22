@@ -31,6 +31,12 @@ Please check out the console demo to see a more detailed example.
 
 ## Updates
 
+### 0.0.6
+- Reorginized the result and model namepsace.
+- Change namespace definition to kind of help support older .Net versions.
+- Added Document Catalog endpoints to CredalClient.
+- Added Action endpoint to CredalClient.
+
 ### 0.0.5
 - Added ConversationException properly report failed Conversation feedback.
 - Refactored the HttpClient process so a single client isn't always used and will auto clean up after each usage.  A HttpClient can still be injected for long term use if needed.
