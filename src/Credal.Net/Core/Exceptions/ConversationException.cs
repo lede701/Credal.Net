@@ -3,11 +3,12 @@
 // Updated: 2025-01-21
 // Source: https://github.com/lede701/Credal.Net
 
-namespace Credal.Net.Exceptions;
-
-public class ConversationException : Exception
+namespace Credal.Net.Exceptions
 {
-    public ConversationException() { }
-    public ConversationException(string message) : base(message) { }
-    public ConversationException(string message, Exception inner) : base(message, inner) { }
+    public class ConversationException : Exception
+    {
+        public ConversationException() { }
+        public ConversationException(string message) : base(message) { }
+        public ConversationException(string message, Exception inner) : base(message, inner) { }
+    }
 }

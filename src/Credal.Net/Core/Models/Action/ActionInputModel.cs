@@ -5,15 +5,16 @@
 
 using System.Text.Json.Serialization;
 
-namespace Credal.Net.Models.Action;
-
-public class ActionInputModel
+namespace Credal.Net.Models.Action
 {
-    [JsonPropertyName("textToAppend")]
-    public String TextToAppend { get; set; }
-
-    public ActionInputModel(String textToAppend)
+    public class ActionInputModel
     {
-        this.TextToAppend = textToAppend;
+        [JsonPropertyName("textToAppend")]
+        public String TextToAppend { get; set; }
+
+        public ActionInputModel(String textToAppend)
+        {
+            this.TextToAppend = textToAppend;
+        }
     }
 }

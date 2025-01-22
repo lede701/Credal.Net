@@ -5,15 +5,16 @@
 
 using System.Text.Json.Serialization;
 
-namespace Credal.Net.Results;
-
-public class CredalResult<T>
+namespace Credal.Net.Results
 {
-    [JsonPropertyName("sendChatResult")]
-    public T? Result { get; set; }
+    public class CredalResult<T>
+    {
+        [JsonPropertyName("sendChatResult")]
+        public T? Result { get; set; }
 
-    public bool IsSuccess { get => this.Result is not null; }
+        public bool IsSuccess { get => this.Result is not null; }
 
-    public static CredalResult<T> Failure { get => new CredalResult<T>() { Result = default }; }
-    public static CredalResult<T> Success(T result) { return new CredalResult<T>() { Result = result }; }
+        public static CredalResult<T> Failure { get => new CredalResult<T>() { Result = default }; }
+        public static CredalResult<T> Success(T result) { return new CredalResult<T>() { Result = result }; }
+    }
 }
