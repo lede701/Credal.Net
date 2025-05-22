@@ -30,6 +30,9 @@ if(credalModel.IsSuccess){
 Please check out the console demo to see a more detailed example.
 
 ## Updates
+### 0.0.7
+- Adding better error response information.
+- Fixed bug not using time provider in newer .net versions
 
 ### 0.0.6
 - Reorginized the result and model namepsace.
