@@ -14,7 +14,9 @@ namespace Credal.Net.Results
 
         public bool IsSuccess { get => this.Result is not null; }
 
-        public static CredalResult<T> Failure { get => new CredalResult<T>() { Result = default }; }
+        public ResponseError? Error { get; set; } = default;
+
+        public static CredalResult<T> Failure { get => new CredalResult<T>() { Result = default, Error = new ResponseError() }; }
         public static CredalResult<T> Success(T result) { return new CredalResult<T>() { Result = result }; }
     }
 }

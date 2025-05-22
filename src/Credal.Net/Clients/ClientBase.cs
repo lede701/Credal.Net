@@ -18,10 +18,12 @@ namespace Credal.Net.Clients
         public EndpointConfig Endpoint { get; set; }
         private readonly HttpClient? _client;
 
-#if NET_8_0_OR_GRATER
-    public DateTime Now { get => TimeProvider.System.GetLocalNow().DateTime; }
+#if NET8_0_OR_GREATER
+        public DateTime Now { get => TimeProvider.System.GetLocalNow().DateTime; }
+        public DateTime UtcNow { get => TimeProvider.System.GetUtcNow().DateTime; }
 #else
-        public DateTime Now { get => DateTime.Now; }
+public DateTime Now { get => DateTime.Now; }
+public DateTime UtcNow { get => DateTime.UtcNow; }
 #endif
 
         public ClientBase(Autherization auth) : this(auth, new ClientHeaders(), new EndpointConfig()) { }
@@ -129,6 +131,23 @@ namespace Credal.Net.Clients
                     var result = JsonSerializer.Deserialize<CredalResult<TResponse>>(jsonResults);
                     return result ?? CredalResult<TResponse>.Failure;
                 }
+            }
+            else if(response is not null)
+            {
+                // Create a error trail to help diagnose connection issue
+                var e = CredalResult<TResponse>.Failure;
+                e.Error!.Message = response.RequestMessage?.ToString() ?? "No error returned from server";
+                e.Error.StatusCode = (int)response.StatusCode;
+
+                var errorContent = await response.Content.ReadAsStringAsync();
+                e.Error.ResponseBody = errorContent;
+                e.Error.RequestUri = response.RequestMessage?.RequestUri?.ToString();
+                e.Error.RequestMethod = response.RequestMessage?.Method?.ToString();
+                e.Error.ReasonPhrase = response.ReasonPhrase;
+                e.Error.Timestamp = this.UtcNow;
+                e.Error.Headers = response.Headers.ToDictionary(h => h.Key, h => string.Join(", ", h.Value));
+
+                return e;
             }
 
             return CredalResult<TResponse>.Failure;
