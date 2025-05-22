@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	<TargetFrameworks>net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
-	<Version>0.0.7</Version>
+	<Version>0.0.8</Version>
 	<Authors>Leland Ede</Authors>
 	<Company>Community</Company>
 	<PackageId></PackageId>

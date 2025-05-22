@@ -86,10 +86,9 @@ namespace Credal.Net.Clients
                     _conversationId = response.Result.ConversationId;
                 }
 
-                return response;
             }
 
-            return CredalResult<SendChatResult>.Failure;
+            return response;
         }
 
         /// <summary>

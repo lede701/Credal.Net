@@ -11,7 +11,7 @@ using Credal.Net.Clients;
 // Create a basic chat manager object, these parameters should be part of a configuration file or environment variables and never hard coded.
 var chat = new CredalClient(Guid.Parse("00000000-0000-0000-0000-000000000000")
     , "<user email address>"
-    , "<API KEY");
+    , "<API KEY>");
 
 
 // Initialize the console input
